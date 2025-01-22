@@ -2,6 +2,7 @@ import express from "express"
 import type { Express, Response } from "express"
 import cors from "cors"
 import pino from "pino-http"
+import path from "node:path"
 
 const app: Express = express()
 const PORT = 3010
@@ -23,6 +24,11 @@ app.use(
     },
   }),
 )
+
+app.get("/", function (_request, response) {
+  // eslint-disable-next-line unicorn/prefer-module
+  response.sendFile(path.join(__dirname, "/static/controller.html"))
+})
 
 const clients: Response[] = []
 
