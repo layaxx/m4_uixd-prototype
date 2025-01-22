@@ -1,12 +1,14 @@
-const express = require("express")
-const cors = require("cors")
-const app = express()
+import express from "express"
+import type { Express, Request, Response } from "express"
+import cors from "cors"
+
+const app: Express = express()
 const PORT = 3010
 
 app.use(express.json())
 app.use(cors())
 
-const clients = []
+const clients: Response[] = []
 
 app.get("/events", (req, res) => {
   res.setHeader("Content-Type", "text/event-stream")
@@ -40,8 +42,8 @@ setInterval(() => {
 
 app.get("/relay", (req, res) => {
   if (!req.query.type) {
-    // Return 404 if type is not provided
-    return res.status(404).send("You need to provide a type")
+    res.status(404).send("You need to provide a type")
+    return
   }
 
   const message = JSON.stringify({ type: req.query.type, msg: req.query.msg })
