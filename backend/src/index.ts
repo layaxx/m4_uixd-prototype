@@ -1,5 +1,5 @@
 import express from "express"
-import type { Express, Request, Response } from "express"
+import type { Express, Response } from "express"
 import cors from "cors"
 import pino from "pino-http"
 
@@ -21,66 +21,66 @@ app.use(
         colorize: true,
       },
     },
-  })
+  }),
 )
 
 const clients: Response[] = []
 
-app.get("/events", (req, res) => {
-  res.setHeader("Content-Type", "text/event-stream")
-  res.setHeader("Cache-Control", "no-cache")
-  res.setHeader("Connection", "keep-alive")
+app.get("/events", (request, response) => {
+  response.setHeader("Content-Type", "text/event-stream")
+  response.setHeader("Cache-Control", "no-cache")
+  response.setHeader("Connection", "keep-alive")
 
-  res.write(`data: Connected to SSE\n\n`)
+  response.write(`data: Connected to SSE\n\n`)
 
-  clients.push(res)
-  req.log.info("client connected, now have %d client(s)", clients.length)
+  clients.push(response)
+  request.log.info("client connected, now have %d client(s)", clients.length)
 
-  req.on("close", () => {
-    const index = clients.indexOf(res)
-    if (index !== -1) {
-      clients.splice(index, 1)
+  request.on("close", () => {
+    const index = clients.indexOf(response)
+    if (index === -1) {
+      request.log.warn("failed to remove client from clients array")
     } else {
-      req.log.warn("failed to remove client from clients array")
+      clients.splice(index, 1)
     }
-    req.log.info("client disconnected")
-    res.status(200).send()
+    request.log.info("client disconnected")
+    response.status(200).send()
   })
 })
 
 // Health-check messages
 setInterval(() => {
   const message = { time: new Date().toISOString() }
-  clients.forEach((client) => {
+  for (const client of clients) {
     try {
       client.write(`data: ${JSON.stringify(message)}\n\n`)
     } catch (error) {
       client.log.error("failed to send message to client %o", error)
     }
-  })
+  }
 }, 2000)
 
-app.get("/relay", (req, res) => {
-  if (!req.query.type) {
-    res.status(404).send("You need to provide a type")
+app.get("/relay", (request, response) => {
+  if (!request.query.type) {
+    response.status(404).send("You need to provide a type")
     return
   }
 
-  const message = { type: req.query.type, msg: req.query.msg }
-  req.log.info("received message %o", message)
+  const message = { type: request.query.type, msg: request.query.msg }
+  request.log.info("received message %o", message)
 
   let count = 0
-  clients.forEach((client) => {
+  for (const client of clients) {
     try {
       client.write(`data: ${JSON.stringify(message)}\n\n`)
       count++
     } catch (error) {
-      req.log.error("failed to send message to client %o", error)
+      request.log.error("failed to send message to client %o", error)
     }
-  })
-  req.log.info("relayed message %o to %d clients", message, clients.length)
+  }
+  request.log.info("relayed message %o to %d clients", message, count)
 
-  res.status(200).send()
+  response.status(200).send()
 })
 
 app.listen(PORT, () => {
