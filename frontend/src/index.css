@@ -4,6 +4,6 @@
 
 @layer base {
   html {
-    @apply text-5xl;
+    @apply ultrawide:text-5xl;
   }
 }
