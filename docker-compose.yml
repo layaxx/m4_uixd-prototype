@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  relay:
+    build: ./backend
+    container_name: relay
+    restart: always
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: always
+
+networks:
+  proxy:
+    external: true

@@ -27,8 +27,6 @@ function App() {
 
   const registerAnswer = useCallback(
     (answerIndex: number) => {
-      console.log({ answerIndex, activeQuestionIndex })
-      console.log(score)
       if (
         answerIndex === activeQuestions[activeQuestionIndex].korrekte_antwort
       ) {
@@ -44,18 +42,24 @@ function App() {
           )
         )
       }
-      console.log(score)
 
       setActiveQuestionIndex((prev) => prev + 1)
     },
-    [activeQuestionIndex, activeQuestions, score]
+    [activeQuestionIndex, activeQuestions]
   )
 
   useEffect(() => {
-    const eventSource = new EventSource("http://localhost:3010/events")
+    console.log(
+      "Connecting to EventSource: ",
+      `${import.meta.env.VITE_RELAY_SERVER ?? "http://localhost:3010"}/events`
+    )
+
+    const eventSource = new EventSource(
+      `${import.meta.env.VITE_RELAY_SERVER ?? "http://localhost:3010"}/events`
+    )
 
     eventSource.onmessage = (event) => {
-      //console.log("Received event:", event.data)
+      console.log("Received event:", event.data)
 
       try {
         JSON.parse(event.data)
