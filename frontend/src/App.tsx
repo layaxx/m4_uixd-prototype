@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import questions from "./data/questions"
 import Scoreboard from "./ScoreBoard"
 import { ScoreState } from "./types"
@@ -13,7 +13,6 @@ function shuffle<T>(input: T[]): T[] {
 }
 
 function App() {
-  const [messages, setMessages] = useState("")
   const [activeQuestions, setActiveQuestions] = useState<Question[]>(
     shuffle(questions)
   )
@@ -26,30 +25,53 @@ function App() {
     setScore(questions.map(() => ScoreState.Upcoming))
   }
 
-  function registerAnswer(answerIndex: number) {
-    if (answerIndex === activeQuestions[activeQuestionIndex].korrekte_antwort) {
-      setScore((prev) =>
-        prev.map((state, index) =>
-          index === activeQuestionIndex ? ScoreState.Correct : state
+  const registerAnswer = useCallback(
+    (answerIndex: number) => {
+      console.log({ answerIndex, activeQuestionIndex })
+      console.log(score)
+      if (
+        answerIndex === activeQuestions[activeQuestionIndex].korrekte_antwort
+      ) {
+        setScore((prev) =>
+          prev.map((state, index) =>
+            index === activeQuestionIndex ? ScoreState.Correct : state
+          )
         )
-      )
-    } else {
-      setScore((prev) =>
-        prev.map((state, index) =>
-          index === activeQuestionIndex ? ScoreState.Incorrect : state
+      } else {
+        setScore((prev) =>
+          prev.map((state, index) =>
+            index === activeQuestionIndex ? ScoreState.Incorrect : state
+          )
         )
-      )
-    }
+      }
+      console.log(score)
 
-    setActiveQuestionIndex((prev) => prev + 1)
-  }
+      setActiveQuestionIndex((prev) => prev + 1)
+    },
+    [activeQuestionIndex, activeQuestions, score]
+  )
 
   useEffect(() => {
     const eventSource = new EventSource("http://localhost:3010/events")
 
     eventSource.onmessage = (event) => {
-      console.log("Received event:", event.data)
-      setMessages(event.data)
+      //console.log("Received event:", event.data)
+
+      try {
+        JSON.parse(event.data)
+        const parsedData = JSON.parse(event.data)
+
+        if (parsedData.type === "reset") {
+          reset()
+        } else if (parsedData.type === "answer") {
+          const msgNumber = Number.parseInt(parsedData.msg, 10)
+          if (!Number.isNaN(msgNumber)) {
+            registerAnswer(msgNumber)
+          }
+        }
+      } catch {
+        console.error("Failed to parse JSON")
+      }
     }
 
     eventSource.onerror = (error) => {
@@ -59,10 +81,10 @@ function App() {
     return () => {
       eventSource.close()
     }
-  }, [])
+  }, [registerAnswer])
 
   return (
-    <div className="p-4 space-y-4">
+    <div className="p-4 space-y-4 w-full">
       <h1 className="text-5xl font-bold">
         Quiz zur <br />
         Bundestagswahl
@@ -75,10 +97,14 @@ function App() {
         />
       )}
       {activeQuestionIndex >= activeQuestions.length && (
-        <>
-          <h2>Danke fürs Teilnehmen!</h2>
-          <button onClick={() => reset()}>Neu starten</button>
-        </>
+        <div className="w-full flex flex-col space-y-4">
+          <h2 className="text-2xl">Danke fürs Teilnehmen!</h2>
+          <button
+            className="bg-blue-100 mx-auto p-4 border-8 border-blue-600"
+            onClick={() => reset()}>
+            Neu starten
+          </button>
+        </div>
       )}
     </div>
   )
