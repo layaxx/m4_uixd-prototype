@@ -5,24 +5,27 @@ import { ScoreState } from "./types"
 import QuestionComponent from "./Question"
 import type { Question } from "./types"
 
-function shuffle<T>(input: T[]): T[] {
+function shuffleTakeN<T>(input: T[], n: number = 5): T[] {
   return input
     .map((value) => ({ value, sort: Math.random() }))
     .sort((a, b) => a.sort - b.sort)
     .map(({ value }) => value)
+    .slice(0, n)
 }
 
 function App() {
   const [activeQuestions, setActiveQuestions] = useState<Question[]>(
-    shuffle(questions)
+    shuffleTakeN(questions)
   )
   const [activeQuestionIndex, setActiveQuestionIndex] = useState(0)
-  const [score, setScore] = useState(questions.map(() => ScoreState.Upcoming))
+  const [score, setScore] = useState(
+    activeQuestions.map(() => ScoreState.Upcoming)
+  )
 
   function reset() {
-    setActiveQuestions(shuffle(questions))
+    setActiveQuestions(shuffleTakeN(questions))
     setActiveQuestionIndex(0)
-    setScore(questions.map(() => ScoreState.Upcoming))
+    setScore(activeQuestions.map(() => ScoreState.Upcoming))
   }
 
   const registerAnswer = useCallback(
