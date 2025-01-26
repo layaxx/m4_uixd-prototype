@@ -9,7 +9,7 @@ import { Party, PrismaClient, Vote } from "@prisma/client"
 const prisma = new PrismaClient()
 
 const app: Express = express()
-const PORT = 3010
+const PORT = 3000
 
 app.use(express.json())
 app.use(cors())
@@ -147,6 +147,6 @@ app.get("/register-vote", async (request, response) => {
   response.status(200).send()
 })
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`SSE server running on http://localhost:${PORT}`)
 })

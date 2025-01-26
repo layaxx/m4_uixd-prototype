@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 export const RELAY_SERVER =
-  import.meta.env.VITE_RELAY_SERVER ?? "http://localhost:3010"
+  import.meta.env.VITE_RELAY_SERVER ?? "http://localhost:3000"
 
 export const RELAY_SERVER_EVENTS = `${RELAY_SERVER}/events`
 
