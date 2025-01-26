@@ -3,6 +3,10 @@ import type { Express, Response } from "express"
 import cors from "cors"
 import pino from "pino-http"
 import path from "node:path"
+import { z } from "zod"
+import { Party, PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
 
 const app: Express = express()
 const PORT = 3010
@@ -32,15 +36,41 @@ app.get("/", function (_request, response) {
 
 const clients: Response[] = []
 
+enum ResponseType {
+  COMPLETE_DATA = "complete",
+  PARTIAL_DATA = "partial",
+  INFO = "info",
+}
+
 app.get("/events", (request, response) => {
   response.setHeader("Content-Type", "text/event-stream")
   response.setHeader("Cache-Control", "no-cache")
   response.setHeader("Connection", "keep-alive")
 
-  response.write(`data: Connected to SSE\n\n`)
+  response.write(
+    `data: ${JSON.stringify({
+      type: ResponseType.INFO,
+      msg: "Connected to SSE",
+    })}\n\n`
+  )
 
   clients.push(response)
   request.log.info("client connected, now have %d client(s)", clients.length)
+
+  try {
+    const votes = prisma.vote.findMany()
+    response.write(
+      `data: ${
+        (JSON.stringify({ type: ResponseType.COMPLETE_DATA }), votes)
+      }\n\n`
+    )
+    request.log.info("Sent complete initial data to client")
+  } catch (error) {
+    request.log.error(
+      "Failed to push complete initial data to client. Error: %o",
+      error
+    )
+  }
 
   request.on("close", () => {
     const index = clients.indexOf(response)
@@ -66,25 +96,49 @@ setInterval(() => {
   }
 }, 2000)
 
-app.get("/relay", (request, response) => {
-  if (!request.query.type) {
-    response.status(404).send("You need to provide a type")
+const VoteParameterSchema = z.object({
+  party: z.nativeEnum(Party, {}),
+  cardID: z.string().min(5),
+})
+
+app.get("/register-vote", async (request, response) => {
+  const { success, data, error } = await VoteParameterSchema.safeParseAsync(
+    request.query
+  )
+  if (!success) {
+    response.status(404).json(error.issues)
     return
   }
 
-  const message = { type: request.query.type, msg: request.query.msg }
-  request.log.info("received message %o", message)
+  request.log.info("received vote for %s", data.party)
+
+  try {
+    const { id } = await prisma.vote.create({ data })
+    request.log.info("created db entry (%s) for vote", id)
+  } catch (error) {
+    request.log.error(
+      "failed to create db entry for vote %o.\nError: %o",
+      data,
+      error
+    )
+    response.status(500).send(JSON.stringify(error))
+  }
 
   let count = 0
   for (const client of clients) {
     try {
-      client.write(`data: ${JSON.stringify(message)}\n\n`)
+      client.write(
+        `data: ${JSON.stringify({
+          type: ResponseType.PARTIAL_DATA,
+          vote: data,
+        })}\n\n`
+      )
       count++
     } catch (error) {
-      request.log.error("failed to send message to client %o", error)
+      request.log.error("failed to send data to client %o", error)
     }
   }
-  request.log.info("relayed message %o to %d clients", message, count)
+  request.log.info("relayed data %o to %d clients", data, count)
 
   response.status(200).send()
 })

@@ -32,7 +32,7 @@ const makeVoteFromDistribution = (): Prisma.VoteCreateInput => {
   } else if (random < 0.931) {
     party = Party.LINKE
   }
-  return { party }
+  return { party, cardID: "seeding" }
 }
 
 async function main() {
