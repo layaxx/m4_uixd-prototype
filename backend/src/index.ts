@@ -22,7 +22,7 @@ app.use(
         colorize: true,
       },
     },
-  }),
+  })
 )
 
 app.get("/", function (_request, response) {
