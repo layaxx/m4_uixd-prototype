@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import Confetti from "react-confetti"
 import { Vote, RELAY_SERVER_EVENTS, ResponseSchema, Party } from "./common"
 import {
   Bar,
@@ -13,6 +14,8 @@ import {
   PieChart,
   Pie,
 } from "recharts"
+import { useWindowSize } from "react-use"
+import PartyImage from "./PartyImage"
 
 const colors: Record<Party, string> = {
   CDU: "#000",
@@ -27,6 +30,11 @@ const colors: Record<Party, string> = {
 
 function StatisticsApp() {
   const [data, setData] = useState<Vote[]>([])
+
+  const { width, height } = useWindowSize()
+  const [lastVotedParty, setLastVotedParty] = useState<Party | null>(null)
+  const timeout = useRef<NodeJS.Timeout | null>(null)
+  const [confettiKey, setConfettiKey] = useState<number>(0)
 
   useEffect(() => {
     console.log("Connecting to EventSource: ", `${RELAY_SERVER_EVENTS}`)
@@ -54,6 +62,11 @@ function StatisticsApp() {
           case "partial":
             console.log("Received partial data")
             setData((oldData) => [...(oldData ?? []), data.vote])
+            setLastVotedParty(data.vote.party)
+            setConfettiKey((old) => old + 1)
+            if (timeout.current) clearTimeout(timeout.current)
+            timeout.current = setTimeout(() => setLastVotedParty(null), 8_000)
+
             break
           case "info":
             console.log("Received info data")
@@ -88,14 +101,40 @@ function StatisticsApp() {
   }))
 
   chartData.sort((a, b) => b.percentage - a.percentage)
+
+  let confettiSource = { w: 0, h: 0, x: 0, y: 0 }
+  if (document && lastVotedParty) {
+    if (document) {
+      const { x, y, width, height } =
+        document
+          .querySelector(
+            `#cell-${chartData.findIndex(({ party }) => party === lastVotedParty)}`
+          )
+          ?.getBoundingClientRect() ?? {}
+
+      if (![x, y, width, height].includes(undefined)) {
+        confettiSource = {
+          x: x! + width! / 2,
+          y: y! + height! - 30,
+          w: 1,
+          h: 1,
+        }
+      }
+    }
+  }
+
   return (
     <div className="p-4 space-y-4 w-full">
-      <h1 className="text-5xl font-bold">Statistics</h1>
+      <h1 className="text-5xl font-bold">Wie wählt der ZOB?</h1>
 
-      <ResponsiveContainer width="100%" height={800}>
+      <div className="w-56 absolute top-0 right-0">
+        {lastVotedParty && <PartyImage party={lastVotedParty} />}
+      </div>
+
+      <ResponsiveContainer width="100%" height={1000}>
         <BarChart
           data={chartData}
-          margin={{ top: 0, right: 10, left: 50, bottom: 50 }}>
+          margin={{ top: 30, right: 10, left: 50, bottom: 50 }}>
           <XAxis dataKey="party" />
           <YAxis tickFormatter={(value) => `${value}%`} />
           <Bar dataKey="percentage" fill="#8884d8">
@@ -106,8 +145,13 @@ function StatisticsApp() {
               fill="#000"
             />
             {chartData.map((entry, index) => {
-              console.log(entry, index)
-              return <Cell key={`cell-${index}`} fill={colors[entry.party]} />
+              return (
+                <Cell
+                  key={`cell-${entry.party}`}
+                  fill={colors[entry.party]}
+                  id={`cell-${index}`}
+                />
+              )
             })}
           </Bar>
           <ReferenceLine y={5} stroke="red" strokeWidth={5}>
@@ -141,6 +185,22 @@ function StatisticsApp() {
           </PieChart>
         </ResponsiveContainer>
       </div>
+      <Confetti
+        width={width}
+        height={height}
+        initialVelocityY={30}
+        initialVelocityX={2}
+        confettiSource={confettiSource}
+        recycle={false}
+        run={confettiKey > 0}
+        key={confettiKey}
+        numberOfPieces={400}
+      />
+
+      <p className="text-center text-2xl">
+        Um an der Umfrage teilzunehmen, müssen Sie lediglich in die Wahlkabine
+        nebenan gehen, und die passende Karte in die Wahlurne stecken.
+      </p>
     </div>
   )
 }

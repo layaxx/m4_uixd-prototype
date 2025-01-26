@@ -1,4 +1,5 @@
 import { Party, Vote } from "./common"
+import PartyImage from "./PartyImage"
 
 function prettyName(party: Party): string {
   switch (party) {
@@ -25,15 +26,7 @@ const VoteComponent = (props: Vote) => {
   return (
     <div>
       <div className="mx-auto ">
-        {props.party !== Party.SONSTIGE && (
-          <img
-            src={`/logos/${props.party.toLowerCase()}.png`}
-            alt={props.party}
-            className="mx-auto"
-            height="auto"
-            width="100%"
-          />
-        )}
+        <PartyImage party={props.party} />
       </div>
       <p className="text-center text-2xl">
         Sie haben für{" "}
