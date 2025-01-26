@@ -4,7 +4,7 @@ import cors from "cors"
 import pino from "pino-http"
 import path from "node:path"
 import { z } from "zod"
-import { Party, PrismaClient } from "@prisma/client"
+import { Party, PrismaClient, Vote } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
@@ -42,7 +42,7 @@ enum ResponseType {
   INFO = "info",
 }
 
-app.get("/events", (request, response) => {
+app.get("/events", async (request, response) => {
   response.setHeader("Content-Type", "text/event-stream")
   response.setHeader("Cache-Control", "no-cache")
   response.setHeader("Connection", "keep-alive")
@@ -58,11 +58,9 @@ app.get("/events", (request, response) => {
   request.log.info("client connected, now have %d client(s)", clients.length)
 
   try {
-    const votes = prisma.vote.findMany()
+    const votes = await prisma.vote.findMany()
     response.write(
-      `data: ${
-        (JSON.stringify({ type: ResponseType.COMPLETE_DATA }), votes)
-      }\n\n`
+      `data: ${JSON.stringify({ type: ResponseType.COMPLETE_DATA, votes })}\n\n`
     )
     request.log.info("Sent complete initial data to client")
   } catch (error) {
@@ -89,7 +87,12 @@ setInterval(() => {
   const message = { time: new Date().toISOString() }
   for (const client of clients) {
     try {
-      client.write(`data: ${JSON.stringify(message)}\n\n`)
+      client.write(
+        `data: ${JSON.stringify({
+          type: ResponseType.INFO,
+          msg: JSON.stringify(message),
+        })}\n\n`
+      )
     } catch (error) {
       client.log.error("failed to send message to client %o", error)
     }
@@ -112,9 +115,10 @@ app.get("/register-vote", async (request, response) => {
 
   request.log.info("received vote for %s", data.party)
 
+  let vote: Vote
   try {
-    const { id } = await prisma.vote.create({ data })
-    request.log.info("created db entry (%s) for vote", id)
+    vote = await prisma.vote.create({ data })
+    request.log.info("created db entry (%s) for vote", vote.id)
   } catch (error) {
     request.log.error(
       "failed to create db entry for vote %o.\nError: %o",
@@ -130,7 +134,7 @@ app.get("/register-vote", async (request, response) => {
       client.write(
         `data: ${JSON.stringify({
           type: ResponseType.PARTIAL_DATA,
-          vote: data,
+          vote: vote!,
         })}\n\n`
       )
       count++

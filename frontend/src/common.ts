@@ -12,14 +12,14 @@ export enum ResponseType {
 }
 
 export enum Party {
-  CDU,
-  AFD,
-  SPD,
-  GRUENE,
-  BSW,
-  FDP,
-  LINKE,
-  SONSTIGE,
+  CDU = "CDU",
+  AFD = "AFD",
+  SPD = "SPD",
+  GRUENE = "GRUENE",
+  BSW = "BSW",
+  FDP = "FDP",
+  LINKE = "LINKE",
+  SONSTIGE = "SONSTIGE",
 }
 
 export const VoteSchema = z.object({
@@ -43,3 +43,5 @@ export const ResponseSchema = z.discriminatedUnion("type", [
     msg: z.string(),
   }),
 ])
+
+export type Vote = z.infer<typeof VoteSchema>
