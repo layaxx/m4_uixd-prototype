@@ -2,7 +2,7 @@ import { PrismaClient, Prisma, Party } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-const NUMBER_OF_VOTES = 10
+const NUMBER_OF_VOTES = 20
 
 /* 	                Cumulative
 CSU         30,2%	

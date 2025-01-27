@@ -29,7 +29,7 @@ app.use(
   })
 )
 
-app.get("/", function (_request, response) {
+app.get("/controller", function (_request, response) {
   // eslint-disable-next-line unicorn/prefer-module
   response.sendFile(path.join(__dirname, "/static/controller.html"))
 })
