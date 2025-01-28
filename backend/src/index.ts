@@ -29,6 +29,10 @@ app.use(
   })
 )
 
+app.get("/status", (_request, response) => {
+  response.status(200).send("Running")
+})
+
 app.get("/controller", function (_request, response) {
   // eslint-disable-next-line unicorn/prefer-module
   response.sendFile(path.join(__dirname, "/static/controller.html"))
