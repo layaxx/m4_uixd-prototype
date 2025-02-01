@@ -63,16 +63,36 @@ function VoteApp() {
   }, [])
 
   return (
-    <div className="p-4 space-y-4 w-full">
-      <h1 className="text-5xl font-bold">der ZOB wählt</h1>
+    <div className="space-y-4 w-full">
+      <div className="bg-slate-200 text-center p-4">
+        <h1 className="text-7xl font-bold">
+          der <span className="text-green-600 font-black">ZOB</span> wählt!
+        </h1>
+        <h2 className="text-4xl font-bold">Umfrage zur Bundestagswahl</h2>
+      </div>
 
-      <p>
-        Um an der Umfrage teilzunehmen, einfach eine der Karten kurz in die Urne
-        stecken und dann zurücklegen, um für die entsprechende Partei
-        abzustimmen.
-      </p>
+      <div className="flex flex-col items-center space-y-4 pt-8">
+        <h2 className="text-5xl text-center font-bold">
+          Jetzt hier abstimmen!
+        </h2>
+        <img
+          src="/down-arrow-svgrepo-com.svg"
+          alt="down arrow"
+          className="w-1/3"
+        />
+      </div>
 
-      {activeVote && <VoteComponent {...activeVote} />}
+      <div className="pt-40 px-4">
+        <p className="text-2xl ">
+          Um an der Umfrage teilzunehmen: einfach{" "}
+          <span className="font-semibold">
+            eine der Karten kurz in die Urne stecken und dann zurücklegen
+          </span>
+          , um für die entsprechende Partei abzustimmen.
+        </p>
+
+        {activeVote && <VoteComponent {...activeVote} />}
+      </div>
     </div>
   )
 }
