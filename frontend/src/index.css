@@ -7,3 +7,15 @@
     @apply ultrawide:text-5xl;
   }
 }
+
+@keyframes insert {
+  0%,
+  100% {
+    transform: translateY(-20%);
+    animation-timing-function: "ease";
+  }
+  50% {
+    transform: none;
+    animation-timing-function: "linear";
+  }
+}

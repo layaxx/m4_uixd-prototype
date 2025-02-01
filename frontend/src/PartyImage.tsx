@@ -9,8 +9,8 @@ const PartyImage: FC<{ party: Party }> = ({ party }) => {
       src={`/logos/${party.toLowerCase()}.png`}
       alt={party}
       className="mx-auto"
-      height="auto"
-      width="100%"
+      height="400"
+      width="auto"
     />
   )
 }

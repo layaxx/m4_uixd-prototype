@@ -24,16 +24,16 @@ function prettyName(party: Party): string {
 
 const VoteComponent = (props: Vote) => {
   return (
-    <div>
-      <div className="mx-auto ">
+    <div className="flex flex-col items-stretch flex-grow">
+      <p className="text-center text-6xl mt-4 font-bold">
+        Vielen Dank für Ihre Teilnahme!
+      </p>
+      <div className="mx-auto pt-10 grow">
         <PartyImage party={props.party} />
       </div>
-      <p className="text-center text-2xl">
+      <p className="text-center text-4xl pb-4">
         Sie haben für{" "}
         <span className="font-bold">{prettyName(props.party)}</span> gestimmt!
-      </p>
-      <p className="text-center text-xl mt-4">
-        Vielen Dank für Ihre Teilnahme!
       </p>
     </div>
   )
