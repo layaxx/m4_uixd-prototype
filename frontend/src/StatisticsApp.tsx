@@ -9,7 +9,6 @@ import {
   ReferenceLine,
   ResponsiveContainer,
   XAxis,
-  YAxis,
   Label,
   PieChart,
   Pie,
@@ -124,48 +123,54 @@ function StatisticsApp() {
   }
 
   return (
-    <div className="p-4 space-y-4 w-full">
-      <h1 className="text-5xl font-bold">Wie wählt der ZOB?</h1>
-
-      <div className="w-56 absolute top-0 right-0">
-        {lastVotedParty && <PartyImage party={lastVotedParty} />}
+    <div className="space-y-4 w-full flex flex-col h-screen">
+      <div className="bg-yellow-200 text-center p-4 pb-6">
+        <h1 className="text-7xl font-bold">
+          So wählt der <span className="text-green-600 font-black">ZOB</span>
+        </h1>
+        <h2 className="text-4xl font-bold">Umfrage zur Bundestagswahl</h2>
       </div>
 
-      <ResponsiveContainer width="100%" height={1000}>
-        <BarChart
-          data={chartData}
-          margin={{ top: 30, right: 10, left: 50, bottom: 50 }}>
-          <XAxis dataKey="party" />
-          <YAxis tickFormatter={(value) => `${value}%`} />
-          <Bar dataKey="percentage" fill="#8884d8">
-            <LabelList
-              dataKey="percentage"
-              position="top"
-              formatter={(value: unknown) => `${Number(value).toFixed(2)}%`}
-              fill="#000"
-            />
-            {chartData.map((entry, index) => {
-              return (
-                <Cell
-                  key={`cell-${entry.party}`}
-                  fill={colors[entry.party]}
-                  id={`cell-${index}`}
-                />
-              )
-            })}
-          </Bar>
-          <ReferenceLine y={5} stroke="red" strokeWidth={5}>
-            <Label
-              value="5%"
-              position="insideBottomRight"
-              fill="black"
-              stroke="black"
-            />
-          </ReferenceLine>
-        </BarChart>
-      </ResponsiveContainer>
+      <div className="grow content-center relative">
+        <div className="w-80 absolute top-0 right-0 animate-pulse">
+          {lastVotedParty && <PartyImage party={lastVotedParty} />}
+        </div>
 
-      <div className="w-full h-96">
+        <ResponsiveContainer width="100%" height={1000}>
+          <BarChart
+            data={chartData}
+            margin={{ top: 30, right: 10, left: 50, bottom: 50 }}>
+            <XAxis dataKey="party" />
+            <Bar dataKey="percentage" fill="#8884d8">
+              <LabelList
+                dataKey="percentage"
+                position="top"
+                formatter={(value: unknown) => `${Number(value).toFixed(2)}%`}
+                fill="#000"
+              />
+              {chartData.map((entry, index) => {
+                return (
+                  <Cell
+                    key={`cell-${entry.party}`}
+                    fill={colors[entry.party]}
+                    id={`cell-${index}`}
+                  />
+                )
+              })}
+            </Bar>
+            <ReferenceLine y={5} stroke="red" strokeWidth={5}>
+              <Label
+                value="5%"
+                position="insideBottomRight"
+                fill="black"
+                stroke="black"
+              />
+            </ReferenceLine>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="w-full h-96 pb-12">
         <ResponsiveContainer>
           <PieChart>
             <Pie
@@ -174,9 +179,10 @@ function StatisticsApp() {
               fill="#8884d8"
               startAngle={180}
               endAngle={0}
-              innerRadius={60}
-              outerRadius={500}
-              strokeWidth={0}>
+              innerRadius="20%"
+              outerRadius="180%"
+              strokeWidth={0}
+              cy="100%">
               {chartData.map((entry, index) => {
                 console.log(entry, index)
                 return <Cell key={`cell-${index}`} fill={colors[entry.party]} />
@@ -188,18 +194,20 @@ function StatisticsApp() {
       <Confetti
         width={width}
         height={height}
-        initialVelocityY={30}
-        initialVelocityX={2}
+        initialVelocityY={{ min: -15, max: -25 }}
+        initialVelocityX={{ min: -3, max: 3 }}
+        gravity={0.15}
         confettiSource={confettiSource}
         recycle={false}
         run={confettiKey > 0}
         key={confettiKey}
-        numberOfPieces={400}
+        numberOfPieces={300}
       />
 
-      <p className="text-center text-2xl">
-        Um an der Umfrage teilzunehmen, müssen Sie lediglich in die Wahlkabine
-        nebenan gehen, und die passende Karte in die Wahlurne stecken.
+      <p className="px-4 text-justify text-4xl pb-8">
+        Um an der Umfrage teilzunehmen, müssen Sie einfach in die{" "}
+        <span className="font-bold">Wahlkabine nebenan</span> gehen, und die
+        passende Karte in die Wahlurne stecken.
       </p>
     </div>
   )
