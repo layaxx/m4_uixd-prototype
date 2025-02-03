@@ -114,7 +114,7 @@ function StatisticsApp() {
       if (![x, y, width, height].includes(undefined)) {
         confettiSource = {
           x: x! + width! / 2,
-          y: y! + height! - 30,
+          y: Math.min(y! + height! - 30, y! + 100),
           w: 1,
           h: 1,
         }
@@ -194,14 +194,15 @@ function StatisticsApp() {
       <Confetti
         width={width}
         height={height}
-        initialVelocityY={{ min: -15, max: -25 }}
-        initialVelocityX={{ min: -3, max: 3 }}
+        initialVelocityY={{ min: -10, max: -20 }}
+        initialVelocityX={{ min: -1.5, max: 1.5 }}
         gravity={0.15}
         confettiSource={confettiSource}
         recycle={false}
         run={confettiKey > 0}
         key={confettiKey}
         numberOfPieces={300}
+        colors={lastVotedParty ? [colors[lastVotedParty]] : undefined}
       />
 
       <p className="px-4 text-justify text-4xl pb-8">
