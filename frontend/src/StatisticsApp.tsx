@@ -24,6 +24,7 @@ const colors: Record<Party, string> = {
   BSW: "#7b2450",
   FDP: "#ffff00",
   LINKE: "#ff00ff",
+  FW: "#f59a00",
   SONSTIGE: "#c0c0c0",
 }
 

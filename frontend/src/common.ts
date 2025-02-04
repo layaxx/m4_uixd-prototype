@@ -19,6 +19,7 @@ export enum Party {
   BSW = "BSW",
   FDP = "FDP",
   LINKE = "LINKE",
+  FW = "FW",
   SONSTIGE = "SONSTIGE",
 }
 

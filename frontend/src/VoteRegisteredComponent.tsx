@@ -17,6 +17,8 @@ function prettyName(party: Party): string {
       return "die FDP"
     case Party.LINKE:
       return "die Linke"
+    case Party.FW:
+      return "die Freien Wähler"
     case Party.SONSTIGE:
       return "eine der sonstige Parteien"
   }

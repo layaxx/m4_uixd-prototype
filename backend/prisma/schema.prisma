@@ -26,4 +26,5 @@ enum Party {
   FDP
   LINKE
   SONSTIGE
+  FW
 }
