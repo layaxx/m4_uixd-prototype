@@ -206,9 +206,9 @@ function StatisticsApp() {
       />
 
       <p className="px-4 text-justify text-4xl pb-8">
-        Um an der Umfrage teilzunehmen, müssen Sie einfach in die{" "}
-        <span className="font-bold">Wahlkabine nebenan</span> gehen, und die
-        passende Karte in die Wahlurne stecken.
+        Jetzt abstimmen! Gehen Sie in die{" "}
+        <span className="font-bold">Wahlkabine nebenan</span> um ihre Stimme für
+        eine der Parteien abzugeben!
       </p>
     </div>
   )
