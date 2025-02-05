@@ -100,6 +100,9 @@ function VoteApp() {
           </div>
         )}
       </div>
+      <p className="text-2xl text-center">
+        Ergebnisse werden links am Display angezeigt
+      </p>
     </div>
   )
 }
