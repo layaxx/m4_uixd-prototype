@@ -4,7 +4,7 @@ library(lubridate)
 
 # Read and preprocess data
 data <- read.csv("./paper/figures/src/data.csv", sep = ",") %>%
-  filter(cardID != "seeding") %>%
+  filter(exclusionReason == "") %>%
   mutate(createdAt = as.POSIXct(createdAt / 1000, origin = "1970-01-01"))
 
 # Define colors

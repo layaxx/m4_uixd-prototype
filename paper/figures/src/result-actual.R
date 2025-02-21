@@ -17,9 +17,8 @@ party_colors <- c(
 )
 
 
-# Filter out rows where cardID == "seeding"
 df_filtered <- data %>%
-  filter(cardID != "seeding")
+  filter(exclusionReason == "")
 
 df_count <- df_filtered %>%
   group_by(party) %>%
@@ -30,4 +29,4 @@ df_count <- df_filtered %>%
 ggplot(df_count, aes(x = fct_reorder(party, count, .desc = TRUE), y = count, fill = party)) +
   geom_bar(stat = "identity") +
   scale_fill_manual(values = party_colors) +  # Apply custom colors
-  labs(title = "Ergebnis ohne Seed-Daten", x = "Partei", y = "Anzahl")+ theme(legend.position = "none")
+  labs(title = "Ergebnis nach manueller Säuberung (ohne Seed-Daten, doppelte Abstimmungen, etc.)", x = "Partei", y = "Anzahl")+ theme(legend.position = "none")
