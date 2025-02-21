@@ -44,10 +44,9 @@ Alle Geräte befinden sich der Einfachheit halber im selben WLAN.
 
 # Kontextualisierung des Prototyps und Reflektion
 
-## Beobachtungen beim Deployment
 Die Installation fand statt am 05. Februar 2025, von 13:30 Uhr bis 16:00 Uhr am Stadt:Raum Bamerg, direkt am zentralen Omnibusbahnhof der Stadt. Zuvor bauten wir die Installation vor Ort rund 20 Minuten öffentlich auf. Kurz nachdem wir die Installation der Öffentlichkeit überließen und uns zurückzogen, interagierten die ersten zwei Passanten, indem sie eine Partei wählten. Gegebenenfalls hat der beobachtbare öffentliche Aufbau der Wahlkabine dazu beigetragen, dass die sich ersten beiden Interaktionen unmittelbar ereigneten, wohingegen die übrigen Interaktionen zeitlich deutlich entzerrter sind.
 
-### Publikum
+## Publikum
 
 Das Publikum am zentralen Omnibusbahnhof bestand im Wesentlichen aus zwei Gruppen. Eine Gruppe umfasst die Personen, die wartend an einer Haltestelle auf der ZOB-Insel standen und Blick auf die Installation hatten. Dies waren ab 13:30 Uhr mehrheitlich Schüler. Zu diesem Zeitpunkt war der ZOB gut gefüllt. Ab 14:30 Uhr waren die Haltestellen geleert und es hielten sich nur noch wenige Passanten an den Haltestellen auf. Die andere Gruppe besteht aus Passanten, die zufällig direkt an der Installation vorbeiliefen und bestand mehrheitlich aus Personen im Alter ab 40 Jahre.
 
@@ -57,15 +56,15 @@ Im Zeitraum von 13:55 Uhr bis 15:05 dokumentierten wir den Durchgangsverkehr vor
 
 Während des Experiments fielen uns drei Muster auf, wie Passanten auf die Installation aufmerksam werden. Bis auf eine einzige Person haben alle interagierenden Passanten gemeinsam, dass sie nur deshalb interagierten, weil sie auf ihrem Weg sowieso an der Installation vorbeigehen mussten und somit zufällig auf die Wahlkabine oder Display 1 aufmerksam wurden. Nur eine einzige Person querte zielgerichtet die Straße und wich somit von seinem eigentlichen Weg ab, um zu partizipieren.
 
-### Muster 1: Vorbeigehen & Schauen
+**Muster 1: Vorbeigehen & Schauen**
 
 Das häufigste Interaktionsmuster bestand darin, dass Passanten, die den Gehsteig vor dem Stadt:Raum entlangliefen, die Ergebnisse auf Display 1 betrachteten oder die Wahlkabine beim Vorbeigehen kurz in Augenschein nahmen. Display 1, dass die Wahlumfrageergebnisse zeigte, verleitete Passanten dazu, anzuhalten und sich die Ergebnisse einen Moment anzusehen, bevor sie weitergingen. Die Wahlkabine diente in diesem Fall als Trigger, der die Aufmerksamkeit auf den Stadt:Raum zog und dadurch womöglich die Wahrnehmung von Display 1 förderte. Nur wenige Passanten blieben stehen, um die Wahlkabine genauer anzusehen, sondern widmeten ihr im Vorbei gehen ein paar Blicke. 3 Passanten betraten zwar die Wahlkabine, wählten aber nicht. Der Großteil der Passanten hat natürlicherweise weder Display 1, noch der Wahlkabine ihre Aufmerksamkeit geschenkt.
 
-### Muster 2: Vorbeigehen & Wählen
+**Muster 2: Vorbeigehen & Wählen**
 
 Alle Wähler bis auf einen kamen zufällig an der Wahlkabine vorbei und interagierten infolge dessen. Keiner der Wähler hat nachträglich auf dem benachbarten Display 1 nachgesehen, wie die Verteilung der Gesamtstimmen ausfällt. Die Wähler waren alle männlich und vermutlich über 40 Jahre alt.
 
-### Muster 3: Straße queren
+**Muster 3: Straße queren**
 
 Ein Passant (männlich, ca. 18 Jahre alt) querte vor der Interaktion aktiv die Straße und betrachtete auf Display 1 die Gesamtverteilung der Stimmen. Er fotografierte das Display mit seinem Smartphone und betrat daraufhin die Wahlkabine, um seine Stimme abzugeben. Da sich die Wahlentscheidung des jungen Manns mit der Partei mit den zu dieser Zeit meisten Stimmen deckte, mutmaßen wir, dass die Umfrageergebnisse ihn dazu motiviert haben, selbst abzustimmen.
 
