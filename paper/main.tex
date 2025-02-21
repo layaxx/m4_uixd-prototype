@@ -135,6 +135,8 @@ Testdeployment}
 % to ensure that quoted texts are typeset according to the rules of your main language.
 %
 \usepackage{csquotes}
+\usepackage{biblatex} %Imports biblatex package
+\addbibresource{bibliography.bib} %Import the bibliography file
 
 %
 % captions
@@ -264,6 +266,12 @@ Testdeployment}
 
 \input{sections/1-urban-prototype.tex}
 \input{sections/2-kontextualisierung.tex}
+
+
+\newpage
+\printbibliography
+
 \input{sections/3-anhang.tex}
+
 
 \end{document}
